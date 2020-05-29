@@ -1,0 +1,333 @@
+## Database
+# global_db_host: platypus.c1lgbejichv8.us-east-1.rds.amazonaws.com
+global_db_host: db.platypus-local.cens.io
+
+env_name: platypus
+
+dns_root: platypus.cens.io
+
+ecs_dev_env: true
+
+enable_pagerduty: false
+
+env_maturity: stage
+
+alert_email: processing-pipeline-team@cens.io
+
+pagerduty_api_key: ''
+
+consul_acl_master_token: 5f0eeff8-4500-44e6-92de-6b51ad4e014e # sssh it's a secret
+#nginx_version: 1.10.1-0+trusty0
+
+cassandra_seeds:
+  - cassandra001.platypus.cens.io
+
+enable_read_write_consistency: true
+
+osm_db_hostname: platypus.maps.cens.io
+altitude_db_hostname: platypus.maps.cens.io
+
+# used for response caching
+redis_host: "platypus-cch.dlm0t3.ng.0001.use1.cache.amazonaws.com"
+redis_port: 6379
+
+service_configurations:
+  internal_site:
+    host: ilb.service.consul
+  ilbalb:
+    host: internal-platy-ILBAL-1OE4E9Y47JOEE-1250560044.us-east-1.elb.amazonaws.com
+  bruce:
+    versioning_enabled: true
+    events_db_name: events
+    principal_location:
+      database: gis
+    data_exchange_interface_type: queue
+    datastore_type: saas
+    feature_configuration:
+      phone_usage:
+        enabled: true
+      data_exchange: ''
+    google_bus_cache:
+      table_name: platypus-google-bus-trips
+      ttl: 2592000
+    version_groups:
+      default:
+        version: '*'  # TODO: change to "0.master.*" when merging dockerization to master
+        queue_name: consumer-bruce-default-platypus
+      john:
+          queue_name: consumer-bruce-john-platypus
+
+  dds_cass:
+    version: '*'
+    host: api-platypus.cens.io
+    admin_key: e4c117c4-6f93-438c-8006-aad806e1d040
+    send_emails: true
+    email_address_override: ''
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: sensors
+    postgres:
+      database: app
+  admin_portal:
+    host: admin.platypus.cens.io
+    version: '*'
+  engage:
+    host: admin.platypus.cens.io
+    version: '*'
+  reports:
+    version: '*'
+  zuul:
+    version: '*'
+  mobile:
+    version: '*'
+    log_level: DEBUG
+    score:
+      cassandra:
+        nodes:
+          - cassandra.service.consul
+        replication_factor: 3
+        keyspace: score
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: sensors
+    postgres:
+      database: app
+    filters:
+      - name: uwsgi_filter
+        regex: ^.*\\[pid.*
+      - name: zuul_filter
+        regex: ^serving request from.*
+    disable_request_cache: false
+  lambda_ilb_url: "http://ilb-lambda.platypus.cens.io:88"
+  group_service:
+    version: '*'
+    admin_key: e4c117c4-6f93-438c-8006-aad806e1d040
+    core_platform_company: b0a93926-d412-49d6-8237-4c20c3e844fa # Fix when we can create companies
+    confirmation_code_expiration: 600
+    confirmation_rate_limit_ttl: 10  # 10 seconds for testing
+    confirmation_rate_limit_request_count: 3
+    disable_redis_cache: false
+    host: api-platypus.cens.io
+    postgres:
+      database: groupservice
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: groups
+    download_url: gotruemotion.com/family
+  dex:
+    version: '*'
+    poll_period: 5
+    poll_max_messages: 1
+    aws_region: us-east-1
+    enable_gzip: true
+    dex_transform: base
+    drain_semaphore_filepath: /etc/censio/dex_stop_and_drain.now
+    consumer_type: sqs
+    sensor_quality_sampling_target: 10
+    kafka:
+      trip:
+        topic_name: ''
+        topic_host: ''
+        consumer_group: ''
+      harsh:
+        topic_name: ''
+        topic_host: ''
+        consumer_group: ''
+      distract:
+        topic_name: ''
+        topic_host: ''
+        consumer_group: ''
+  ubi3:
+    version: '*'
+    admin_key: e4c117c4-6f93-438c-8006-aad806e1d040
+    confirmation_code_expiration: 600
+    host: api-platypus.cens.io
+    postgres:
+      database: ubi3
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: ubi3
+    profiler_config:
+      activated: true,
+      sample_every_nth_call: 5
+    notification_service_config:
+      queue_name: platypus-notification-service-consumer-queue
+      region: us-east-1
+  ubi3_enroll:
+    notification_service_config:
+      queue_name: platypus-notification-service-consumer-queue
+      region: us-east-1
+  tmfa_notifications:
+    version: '*'
+    postgres:
+      database: tmfa-notifications
+    queue_name: tmfa-notifications-service-queue
+    poll_max_messages: 1
+    visibility_timeout: 30
+    message_retention_period: 1209600
+    receive_message_wait_time_seconds: 20
+    max_receive_count: 3
+    log_level: 20
+    companies:
+      - d1212dd1-763e-44ab-8ffc-3723faf2d5ce  # Fix when we can create companies
+  tmfb:
+    version: '*'
+    postgres:
+      database: tmfb
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: tmfb
+  pushit:
+    version: '*'
+    host: api-platypus.cens.io
+    postgres:
+      database: pushit
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: pushit
+  tmoab:
+    version: '*'
+    postgres:
+      database: tmoab
+  version_router:
+    version: '*'
+    host: api-platypus.cens.io
+    postgres:
+      database: version-routing
+
+message_router_version: '*'
+message_router_worker_count: 3
+message_router_poll_wait_time: 20
+message_router_error_wait_time: 2
+message_router_max_receive_messages: 5
+message_router_cassandra:
+  nodes:
+    - cassandra.service.consul
+  replication_factor: 3
+  keyspace: messagerouter
+
+wtw_external_service_url: https://api-staging.dev.cens.io/mock/octo/AccountData
+wtw_get_score_url: https://api-staging.dev.cens.io/mock/octo/v2/ScoreData/{}/{}
+
+per_company_score:
+  6e33be94-33c7-41fc-a9e2-8461cba855a9: travelers # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  7f3da760-1979-425c-88fe-9c7a51bc064c: geico # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  80b4c70c-4b3a-4d3b-ac17-b898762e95a7: ace # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  e76fd4d8-2185-4595-9647-e6a35ceeca29: amfam # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+
+ubi3_customers:
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: "UBI3 Test"
+    app_name: "UBI3 Test"
+    app_download_copy:
+      en-US: "Download the UBI3 Test app"
+    app_download_copy_forward:
+      en-US: "{FirstName} {LastName} has been added to your policy"
+    description: "UBI3 Test"
+    twilio_from_number: '+19782282739'
+    company_id: "7f3da760-1979-425c-88fe-9c7a51bc064c"
+    score_system: "default"
+    sftp_username: "UBI3Test"
+    ssh_pub_key: internal-test.pub
+    customer_code: "ubi3-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: "qa-test-key.pgp"
+    pgp_recipient: "qa@gotruemotion.com"
+    jwt_public_key: internal_test_jwt_pub.pem
+    supported_locales:
+      - "en-US"
+    first_registration_reminder_copy:
+      en-US: "First reminder to download the UBI3 Test app"
+    first_registration_reminder_copy_forward:
+      en-US: "First reminder for {FirstName} to download the UBI3 Test app"
+    second_registration_reminder_copy:
+      en-US: "Final reminder to download the UBI3 Test app"
+    second_registration_reminder_copy_forward:
+      en-US: "Final reminder for {FirstName} to download the UBI3 Test app"
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    base_discount_rate: 5.0
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    sms_forward_policy: "to_primary"
+    custom_data_fields:
+      - crashEligibility
+  - name: "Platypus Inc"
+    app_name: "Platypus Test"
+    company_id: "a145b502-f675-4226-9719-674ea1f09855"
+    twilio_from_number: '+19782282739'
+    sftp_username: ''
+    ssh_pub_key: internal-test.pub
+    customer_code: platypus-inc
+    ingestion_summary_notify_email: aman.zargarpur@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    use_csv: true
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: false
+    use_raw_data_delivery_via_s3: false
+    app_download_copy:
+      en-US: "Download the Platypus Test app"
+    app_download_copy_forward:
+      en-US: "{FirstName} {LastName} has been added to your policy"
+    description: "Platypus Test"
+    score_system: "default"
+    supported_locales:
+      - "en-US"
+    first_registration_reminder_copy:
+      en-US: "First reminder to download the Platypus Test app"
+    first_registration_reminder_copy_forward:
+      en-US: "First reminder for {FirstName} to download the Platypus Test app"
+    second_registration_reminder_copy:
+      en-US: "Final reminder to download the Platypus Test app"
+    second_registration_reminder_copy_forward:
+      en-US: "Final reminder for {FirstName} to download the Platypus Test app"
+    sms_forward_policy: "to_primary"
+  - name: John Inc Test
+    app_name: John Inc Test
+    score_system: default
+    app_download_copy: Go to www.cens.io/test to download the test app
+    description: Testing
+    twilio_from_number: '+19782282739'
+    company_id: 79891f72-e5ee-48b5-a2b2-44e5eb85e5cb
+    sftp_username: ''
+    ssh_pub_key: internal-test.pub
+    customer_code: john-test
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+
+ubi3_enroll_version: '*'
+
+additional_customer_pgp_keys: []
+
+bruce_aggregate_cron_state: absent
+
+apps: {}
+
+#consul_version: "0.7.5.6"
+consul_version: "1.3.1.12"
