@@ -1,0 +1,1434 @@
+# vim:ft=ansible:
+
+#AWS Production
+
+## Database
+# global_db_host: staging.c1lgbejichv8.us-east-1.rds.amazonaws.com
+global_db_host: db.staging-local.cens.io
+
+env_name: staging
+
+dns_root: staging.cens.io
+
+ecs_dev_env: true
+
+enable_pagerduty: true
+
+#logzio - set logzio_token in private.yaml!!!!
+logzio_enabled: false
+
+#disable and/or uninstall sumologic
+disable_sumo: false
+uninstall_sumo: false
+
+env_maturity: stage
+
+alert_email: devops@cens.io
+
+pagerduty_api_key: ''
+
+#nginx_version: 1.10.1-0+trusty0
+
+cassandra_seeds:
+  - cassandra001.staging.cens.io
+
+enable_read_write_consistency: true
+
+osm_db_hostname: staging.maps.cens.io
+altitude_db_hostname: staging.maps.cens.io
+
+# used for response caching
+redis_host: "staging-cch.dlm0t3.ng.0001.use1.cache.amazonaws.com"
+redis_port: 6379
+
+service_configurations:
+  internal_site:
+    host: ilb.service.consul
+  ilbalb:
+    host: internal-stagi-ILBAL-1157OWVB6SS4E-1240426362.us-east-1.elb.amazonaws.com
+  pulse:
+    version: '*'
+    company_list:
+      - {company_name: Mojo, company_id: d77321be-e822-4d94-a919-5f2040b51fa1, timing: '1',
+        app: mojo_dev, use_ua: true}
+  trip_service:
+    version: '*'
+    use_dds: true
+    host: trip00.cf.cens.io
+    db_name: trip_service
+    db_password: '{{ staging_trip_service_db_password }}'
+  bruce:
+    versioning_enabled: true
+    events_db_name: events
+    principal_location:
+      database: gis
+    data_exchange_interface_type: queue
+    datastore_type: saas
+    feature_configuration:
+      phone_usage:
+        enabled: true
+      data_exchange: ''
+    google_bus_cache:
+      table_name: staging-google-bus-trips
+      ttl: 2592000
+    version_groups:
+      default:
+        queue_name: consumer-bruce-default-staging
+      test:
+        queue_name: consumer-bruce-test-staging
+      "1.5":
+        queue_name: consumer-bruce-1-5-staging
+
+  dds_cass:
+    version: '*'
+    host: api-staging.dev.cens.io
+    admin_key: '{{ staging_dds_cass_admin_key }}'
+    invitation_key: '{{ staging_dds_cass_invitation_key }}'
+    send_emails: true
+    email_address_override: ''
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: sensors
+    postgres:
+      database: app
+  admin_portal:
+    host: admin.staging.cens.io
+    version: '*'
+  engage:
+    host: admin.staging.cens.io
+    version: '*'
+  reports:
+    version: '*'
+  zuul:
+    version: '*'
+  mobile:
+    version: '*'
+    log_level: DEBUG
+    sensor_metadatabase:
+      user: 'sensor_service'
+      name: 'sensor_metadatabase'
+      password: '{{ sensor_metadatabase_password }}'
+      host: 'sa1jjjo4e4ooa0z.c1lgbejichv8.us-east-1.rds.amazonaws.com'
+    score:
+      cassandra:
+        nodes:
+          - cassandra.service.consul
+        replication_factor: 3
+        keyspace: score
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: sensors
+    postgres:
+      database: app
+    filters:
+      - name: uwsgi_filter
+        regex: ^.*\\[pid.*
+      - name: zuul_filter
+        regex: ^serving request from.*
+    disable_request_cache: false
+    crash_service_topic_arn: "arn:aws:sns:us-east-1:823515223610:staging-crash-service-datastores-IncomingSnsTopic-CA4LQWLU55V9"
+    xray:
+      enabled: 'False'
+  lambda_ilb_url: "http://ilb-lambda.staging.cens.io:88"
+  group_service:
+    version: '*'
+    package_name_postfix: '' #Use this to install custom named packages built from feature branches, DO NOT MERGE TO MASTER
+    admin_key: '{{ staging_group_service_admin_key }}'
+    mail_service_from_address: app@gotruemotion.com
+    mail_service_sender_name: TrueMotion Family
+    email_confirmation_key: '{{ staging_group_service_email_confirmation_key }}'
+    core_platform_company: b0a93926-d412-49d6-8237-4c20c3e844fa
+    confirmation_code_expiration: 600
+    confirmation_rate_limit_ttl: 10  # 10 seconds for testing
+    confirmation_rate_limit_request_count: 3
+    enable_circuit_breaker: true
+    host: api-staging.dev.cens.io
+    postgres:
+      database: groupservice
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: groups
+    download_url: gotruemotion.com/family
+  dex:
+    version: '*'
+    package_name_postfix: '' #Use this to install custom named packages built from feature branches, DO NOT MERGE TO MASTER
+    poll_period: 5
+    poll_max_messages: 1
+    aws_region: us-east-1
+    enable_gzip: true
+    dex_transform: base
+    drain_semaphore_filepath: /etc/censio/dex_stop_and_drain.now
+    consumer_type: sqs
+    sensor_quality_sampling_target: 10
+    log_level: DEBUG
+    kafka:
+      trip:
+        topic_name: ''
+        topic_host: ''
+        consumer_group: ''
+      harsh:
+        topic_name: ''
+        topic_host: ''
+        consumer_group: ''
+      distract:
+        topic_name: ''
+        topic_host: ''
+        consumer_group: ''
+  pgr_behavior_service:
+    version: '*'
+    cohort_company: 51a06b75-046d-4084-9eeb-04442e73d2fa
+    peer_cohort_company: 51a06b75-046d-4084-9eeb-04442e73d2fa
+    control_group_company: 51a06b75-046d-4084-9eeb-04442e73d2fa
+    postgres:
+      database: pgr-behavior-service
+    aggregate_sqs_queue_name: pgr-behavior-service-aggregate-queue
+    aggregate_queue_drain_semaphore_filepath: /etc/censio/pgr_behavior_service_aggregate_stop_drain.now
+    per_trip_sqs_queue_name: pgr-behavior-service-per-trip-queue
+    per_trip_queue_drain_semaphore_filepath: /etc/censio/pgr_behavior_service_stop_drain.now
+    poll_period: 5
+    poll_max_messages: 1
+    visibility_timeout: 30
+    message_retention_period: 1209600
+    receive_message_wait_time_seconds: 20
+    max_receive_count: 3
+    aggregator_log_file: /var/log/censio-pgr-behavior-service-aggregator.log
+    log_level: 20
+    days_until_cohort_assignment: 0
+  pgr_beh_reports:
+    version: '*'
+    postgres:
+      database: pgr-behavior-service
+    companies: d1212dd1-763e-44ab-8ffc-3723faf2d5ce
+  ubi3_trials:
+    version: '*'
+    admin_key: '{{ staging_ubi3_trials_admin_key }}'
+    confirmation_code_expiration: 600
+    host: api-staging.dev.cens.io
+    postgres:
+      database: ubi3trials
+  ubi3:
+    version: '*'
+    branch: 'develop'
+    admin_key: '{{ staging_ubi3_admin_key }}'
+    confirmation_code_expiration: 600
+    host: api-staging.dev.cens.io
+    postgres:
+      database: ubi3
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: ubi3
+    profiler_config:
+      activated: true,
+      sample_every_nth_call: 5
+    notification_service_config:
+      queue_name: staging-notification-service-consumer-queue
+      region: us-east-1
+  ubi3_enroll:
+    notification_service_config:
+      queue_name: staging-notification-service-consumer-queue
+      region: us-east-1
+    registration_reminder:
+      source_version: 'v2'
+      batch_size: 1000
+  tmfa_notifications:
+    version: '*'
+    postgres:
+      database: tmfa-notifications
+    queue_name: tmfa-notifications-service-queue
+    poll_max_messages: 1
+    visibility_timeout: 30
+    message_retention_period: 1209600
+    receive_message_wait_time_seconds: 20
+    max_receive_count: 3
+    log_level: 20
+    companies:
+      - d1212dd1-763e-44ab-8ffc-3723faf2d5ce
+  tmfb:
+    version: '*'
+    package_name_postfix: '' #Use this to install custom named packages built from feature branches, DO NOT MERGE TO MASTER
+    postgres:
+      database: tmfb
+    enable_circuit_breaker: True
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: tmfb
+  mojo:
+    version: '*'
+    postgres:
+      database: mojo
+    core_platform_company: f4476bf2-9284-4fa4-ab37-17e7d4c7b858
+    rewards_provider_type: virtual_incentives_dev
+    rewards_provider_http_user: truemotion
+    confirmation_code_expiration: 600
+    confirmation_rate_limit_ttl: 10  # 10 seconds for testing
+    confirmation_rate_limit_request_count: 3
+  pushit:
+    version: '*'
+    package_name_postfix: '' #Use this to install custom named packages built from feature branches, DO NOT MERGE TO MASTER
+    host: api-staging.dev.cens.io
+    postgres:
+      database: pushit
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: pushit
+  tmoab:
+    version: '*'
+    package_name_postfix: '' #Use this to install custom named packages built from feature branches, DO NOT MERGE TO MASTER
+    postgres:
+      database: tmoab
+  version_router:
+    version: '*'
+    package_name_postfix: '' #Use this to install custom named packages built from feature branches, DO NOT MERGE TO MASTER
+    host: api-staging.dev.cens.io
+    postgres:
+      database: version-routing
+  fleet_service:
+    version: '*'
+    package_name_postfix: '' #Use this to install custom named packages built from feature branches, DO NOT MERGE TO MASTER
+    postgres:
+      database: fleetservice
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: fleetservice
+    download_url: gotruemotion.com/tmc
+    admin_key: '{{ staging_fleet_service_admin_key }}'
+  agg:
+    version: '*'
+    cassandra:
+      nodes:
+        - cassandra.service.consul
+      replication_factor: 3
+      keyspace: agg
+    log_level: WARNING
+
+message_router_version: '*'
+message_router_worker_count: 3
+message_router_poll_wait_time: 20
+message_router_error_wait_time: 2
+message_router_max_receive_messages: 5
+message_router_cassandra:
+  nodes:
+    - cassandra.service.consul
+  replication_factor: 3
+  keyspace: messagerouter
+
+wtw_external_service_url: https://mock-staging.dev.cens.io/OctoMock/AccountData
+wtw_get_score_url: https://mock-staging.dev.cens.io/OctoMock/v2/ScoreData/{}/{}
+
+wtw_score_companies_to_wtw_company_id:
+  d7d8fdac-6059-4bb5-b0e5-f63ce43ed305: '46168' # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  3486e316-bf6b-4c21-b9c7-1ffa2ad23c75: '99900'
+  f2e64d6f-8501-42f2-872d-e6c10e04f5a0: '99210'
+
+per_company_score:
+  b0a93926-d412-49d6-8237-4c20c3e844fa: behavior_modification
+  d7d8fdac-6059-4bb5-b0e5-f63ce43ed305: wtw-ml # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  5ce0575c-0068-4121-a6a0-365494accd44: travelers # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  d7a93db9-09e7-4a10-9beb-aacf757474e6: safety # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  d4ef6d61-b216-4660-b344-46951471753b: behavior_modification # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  f4476bf2-9284-4fa4-ab37-17e7d4c7b858: cougar_wingman
+  0a062d61-1c93-4717-8800-a48ff2378b28: amfam # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  3486e316-bf6b-4c21-b9c7-1ffa2ad23c75: wtw-ao
+  abc20863-ccb4-4184-a0f3-98e37fc4aa3c: ace # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  8c8b1f98-92d8-4617-abde-c9d92a628942: metlife-commercial
+  92a693a8-feba-474d-92da-ee727b720aa2: geico
+  cdf4c109-d7e1-4e4f-883c-0208a8b541a9: lbf
+  c1a85acd-c55d-45c0-a083-8ef97556fc66: intact # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  084ffb37-db29-45e5-b72d-b80fa82321cd: usaa # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  92e67558-d068-445a-907f-2716a8483f18: farmers # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  f2e64d6f-8501-42f2-872d-e6c10e04f5a0: wtw-ml
+
+ubi3_customers:
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: MetLife
+    app_name: My Journey Mobile
+    app_download_copy: Go to your IBM App Center app (available at http://bit.ly/2iwDD3d),
+      select MyJourney, and press the Install button download the My Journey Mobile
+      app.
+    description: MetLife Auto & Home Insurance
+    twilio_from_number: '+12063505738'
+    company_id: d7d8fdac-6059-4bb5-b0e5-f63ce43ed305
+    score_system: wtw
+    sftp_username: MetLife
+    ssh_pub_key: internal-test.pub
+    customer_code: metlife
+    jwt_public_key: internal_test_jwt_pub.pem
+    ingestion_summary_notify_email: qa@cens.io
+    pgp_key: metlife-public-pgp.asc
+    pgp_recipient: epilar@metlife.com
+    use_csv: true
+    is_tmfb: false
+    is_fleet_service: false
+    first_registration_reminder_copy: "MetLife My Journey Reminder: Don't forget to\
+      \ download the app and get setup. Follow this link to get started: http://onelink.to/myjourney"
+    second_registration_reminder_copy: 'MetLife My Journey 2nd Reminder: Don’t risk
+      losing your discount! Download the app within the next 7 days to keep your discount.
+      http://onelink.to/myjourney'
+    reminder_start_with_monitoring: true
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    enrollment_monitoring_processing_enabled: true
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: Intact
+    app_name: Intact
+    app_download_copy:
+      en-US: 'Welcome to my Driving Discount from Intact Insurance! Download and activate
+        the program here: http://clients.intact.ca/mydriving\nLog in with your policy
+        number {PolicyID}'
+      fr-CA: 'Bienvenue à Ma conduite d’Intact Assurance! Téléchargez et activez le
+        programme ici : http://clients.intact.ca/maconduite\nConnectez-vous avec votre
+        numéro de police {PolicyID}'
+    description: Intact
+    twilio_from_number: '+12063505738'
+    twilio_from_numbers:
+      registration_reminder: '+16172075506'
+    company_id: c1a85acd-c55d-45c0-a083-8ef97556fc66
+    score_system: default
+    sftp_username: Intact
+    ssh_pub_key: internal-test.pub
+    customer_code: intact
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: false
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    driver_status_transform: metric_units
+    first_registration_reminder_copy:
+      en-US: 'Don’t forget to complete your my Driving Discount enrolment! Download
+        and activate the program here: http://clients.intact.ca/mydriving\nLog in
+        with your policy number {PolicyID}'
+      fr-CA: 'N’oubliez pas de compléter votre inscription à Ma conduite! Téléchargez
+        et activez le programme ici : http://clients.intact.ca/maconduite\nConnectez-vous
+        avec votre numéro de police {PolicyID}'
+    second_registration_reminder_copy:
+      en-US: 'Hurry! Download the app and activate the my Driving Discount program
+        today before your enrolment is cancelled:  http://clients.intact.ca/mydriving\nLog
+        in with your policy number {PolicyID}.'
+      fr-CA: "Vite! Téléchargez et activez Ma conduite aujourd'hui avant l'annulation\
+        \ de votre inscription : http://clients.intact.ca/maconduite\\nConnectez-vous\
+        \ avec votre numéro de police {PolicyID}"
+    supported_locales:
+      - en-US
+      - fr-CA
+    additional_driver_status_fields_from_enrollment:
+      - CompanyID
+      - ProgramID
+      - PolicyID
+      - FirstName
+      - LastName
+      - Locale
+      - PhoneNumber
+      - EnrollmentDate
+      - AgencyID
+      - Created
+    driver_status_force_csv: true
+    whitelisted_nets:
+      - 199.243.65.0/24
+      - 199.243.65.23
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: Travelers
+    app_name: IntelliDrive
+    app_download_copy: Welcome to the Travelers IntelliDrive® program. Go to http://onelink.to/travelers
+      to get our app! Reply with STOP to opt out of future text messages.
+    description: Travelers Insurance
+    twilio_from_number: '+12063505738'
+    company_id: 5ce0575c-0068-4121-a6a0-365494accd44
+    score_system: travelers
+    sftp_username: Travelers
+    ssh_pub_key: internal-test.pub
+    customer_code: travelers
+    ingestion_summary_notify_email: qa@cens.io
+    pgp_key: travelerspc.pgp
+    pgp_recipient: security@travelers.com
+    jwt_public_key: internal_test_jwt_pub.pem
+    is_tmfb: false
+    is_fleet_service: false
+    first_registration_reminder_copy: Remember to install Travelers IntelliDrive™
+      on your phone. Go to http://onelink.to/travelers to get started! Reply with
+      STOP to opt out of future text messages.
+    second_registration_reminder_copy: Final reminder to install Travelers IntelliDrive™,
+      available at http://onelink.to/travelers or app stores. Reply with STOP to opt
+      out of future text messages.
+    use_old_file_naming: true
+    show_cancelled_state: true
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    emit_event_for_days_in_program:
+      - 7
+      - 30
+      - 60
+    urban_airship:
+      key: '{{ staging_travelers_test_urban_airship_key }}'
+      secret: '{{ staging_travelers_test_urban_airship_secret }}'
+
+  - name: MetLife Commercial
+    app_name: TMC-Dev
+    app_download_copy: Go to www.cens.io/test to download the test app
+    description: TMFC Dev-Test
+    twilio_from_number: '+12063505738'
+    company_id: 8c8b1f98-92d8-4617-abde-c9d92a628942
+    score_system: default
+    sftp_username: fleettest
+    ssh_pub_key: internal-test.pub
+    customer_code: metlife-commercial
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    is_tmfb: false
+    is_fleet_service: true
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  - name: Auto-Owners
+    app_name: Auto-Owners
+    app_download_copy: Please go to http://onelink.to/TrueRide to download the TrueRide
+      by Auto-Owners app.
+    description: Auto-Owners Insurance
+    twilio_from_number: '+12063505738'
+    company_id: 3486e316-bf6b-4c21-b9c7-1ffa2ad23c75
+    score_system: wtw
+    sftp_username: AutoOwners
+    ssh_pub_key: internal-test.pub
+    customer_code: auto-owners
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    is_tmfb: false
+    is_fleet_service: false
+    first_registration_reminder_copy: "TrueRide by Auto-Owners Reminder: Don't forget\
+      \ to download the app and get setup. Follow this link to get started: http://onelink.to/trueride"
+    second_registration_reminder_copy: 'FINAL TrueRide by Auto-Owners Reminder: Download
+      the app and get setup today. Follow this link to get started: http://onelink.to/trueride'
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: Safety Insurance
+    app_name: Drive With Safety
+    app_download_copy: Welcome to Drive with Safety. Go to http://onelink.to/drivewithsafety
+      to get our app! Reply with STOP to opt out of future messages.
+    description: Safety Insurance
+    twilio_from_number: '+12063505738'
+    company_id: d7a93db9-09e7-4a10-9beb-aacf757474e6
+    score_system: safety
+    sftp_username: Safety
+    ssh_pub_key: internal-test.pub
+    customer_code: safety-insurance
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: true
+    is_tmfb: true
+    is_fleet_service: false
+    show_cancelled_state: false
+    default_monitoring_duration_days: -1
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    urban_airship:
+      key: '{{ staging_safety_test_urban_airship_key }}'
+      secret: '{{ staging_safety_test_urban_airship_secret }}'
+    additional_driver_status_fields_from_enrollment:
+      - "FirstName"
+      - "LastName"
+      - "PhoneNumber"
+      - "PolicyID"
+      - "AgencyID"
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: American Family Teen Safe Driver
+    app_name: Teen Safe Driver
+    app_download_copy: 'Download the American Family Teen Safe Driver app here: http://onelink.to/teensafe.
+      Reply with STOP to opt out of future text messages.'
+    description: American Family Teen Safe Driver
+    twilio_from_number: '+12063505738'
+    company_id: d4ef6d61-b216-4660-b344-46951471753b
+    score_system: behavior_modification
+    sftp_username: AmFam
+    ssh_pub_key: internal-test.pub
+    customer_code: amfam-teensafe
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: false
+    is_tmfb: true
+    is_fleet_service: false
+    first_registration_reminder_copy: Remember to install American Family Teen Safe
+      Driver!  http://onelink.to/teensafe Reply with STOP to opt out of future text
+      messages.
+    second_registration_reminder_copy: Final reminder to install American Family Teen
+      Safe Driver.  http://onelink.to/teensafe Reply with STOP to opt out of future
+      text messages.
+    trip_reminder_copy: Hi from American Family! It's been 2 weeks since TeenSafe
+      last recorded a drive for you. Make sure the app is installed and location permissions
+      are turned on.
+    driver_status_transform: program_complete_1y_or_3000mi
+    driver_status_force_csv: true
+    show_cancelled_state: false
+    base_discount_rate: 5.0
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: ACE
+    app_name: ACE
+    app_download_copy: You are now enrolled for ACE beta testing
+    description: ACE
+    twilio_from_number: '+12063505738'
+    company_id: abc20863-ccb4-4184-a0f3-98e37fc4aa3c
+    score_system: ace
+    sftp_username: ACETest
+    ssh_pub_key: internal-test.pub
+    customer_code: ace
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: true
+    is_tmfb: false
+    is_fleet_service: false
+    use_date_string_file_naming: true
+    driver_status_transform: replace_epoch_with_date_string
+    score_ingest_input_transform: ace
+    show_cancelled_state: true
+    use_windows_lineterminator: true
+    show_default_score_factors: true
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  - name: Nationwide
+    app_name: Nationwide
+    app_download_copy: You are now enrolled for Nationwide beta testing
+    description: Nationwide
+    twilio_from_number: '+12063505738'
+    company_id: f757770d-9521-470d-879c-d811cddea075
+    score_system: default
+    sftp_username: NationwideTest
+    ssh_pub_key: internal-test.pub
+    customer_code: nationwide
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: false
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: USAA
+    app_name: USAA
+    app_download_copy: "From USAA: Your auto policy was enrolled in the USAA SafePilot™ program.
+      Download the app and start driving: http://onelink.to/USAASafePilot.
+      To stop receiving texts from USAA SafePilot, reply STOP. Msg & Data Rates May Apply."
+    description: USAA Test
+    twilio_from_number: '+12063505738'
+    company_id: 084ffb37-db29-45e5-b72d-b80fa82321cd
+    score_system: default
+    sftp_username: USAATest
+    ssh_pub_key: internal-test.pub
+    customer_code: usaa
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: false
+    is_tmfb: false
+    is_fleet_service: false
+    first_registration_reminder_copy: "From USAA: Don’t lose your discount!
+      Download the USAA SafePilot™ App and get started right away to keep your discount:
+      http://onelink.to/USAASafePilot. To stop receiving texts from USAA SafePilot, reply STOP.
+      Msg & Data Rates May Apply."
+    second_registration_reminder_copy: "From USAA: Finish what you started!
+      Download the USAA SafePilot™ App to get started and keep your discount on track:
+      http://onelink.to/USAASafePilot. To stop receiving texts from USAA SafePilot, reply STOP.
+      Msg & Data Rates May Apply."
+    confirmation_sms_copy: "Your USAA SafePilot™ activation code is {code}.
+      To stop receiving texts from USAA SafePilot, reply STOP. Msg & Data Rates May Apply."
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    terms_and_conditions_default_accepted: true
+    send_device_sensor_info: true
+    additional_driver_status_fields:
+     - TrueMotionDriverId
+     - DataCollectionStrategyReason
+     - TermsAndConditions
+    additional_driver_status_fields_from_enrollment:
+     - DataCollectionStrategy
+    custom_data_fields:
+     - DataCollectionStrategyReason
+     - Reason
+
+  - name: UnipolSai
+    app_name: Unipol Sai
+    app_download_copy: ''
+    description: Unipol Sai
+    twilio_from_number: ''
+    company_id: 0956cc38-bdb4-42f2-bdc0-193750ae7581
+    score_system: default
+    sftp_username: UnipolSai
+    ssh_pub_key: internal-test.pub
+    customer_code: unipol-sai
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: false
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  - name: YouToggle
+    app_name: YouToggle
+    app_download_copy: Go to www.cens.io/youtoggle to download the test app
+    description: YouToggle
+    twilio_from_number: '+12063505738'
+    company_id: 48944dde-c1e9-4579-b742-cce1e2d24672
+    score_system: default
+    sftp_username: YouToggle
+    ssh_pub_key: internal-test.pub
+    customer_code: youtoggle
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    is_tmfb: false
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  - name: Snapshot 1.9
+    app_name: Snapshot 1.9
+    app_download_copy: Download the Snapshot 1.9 app
+    description: Snapshot 1.9
+    twilio_from_number: ''
+    company_id: ecd1fb76-51e3-410c-bc7b-196bb79cd2c1
+    score_system: default
+    sftp_username: Snapshot
+    ssh_pub_key: internal-test.pub
+    customer_code: snapshot-1-9
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    is_fleet_service: false
+    reminder_start_with_monitoring: false
+    is_tmfb: false
+    require_phone_number: false
+    custom_data_fields:
+      - ratedDistractedDriving
+      - summarizationMethod
+      - programCode
+      - showInvitationScreen
+      - invitationScreenType
+      - crashEligibility
+    legacy_company_id: 56e1de65-a3fa-4213-8999-0e6db8d2d43b
+    legacy_authorization_server: 54d04753-98e7-41a8-8932-457437f9740b
+    legacy_monitoring_period: true
+    expect_enrollment_during_verify: true
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    urban_airship:
+      key: '{{ staging_snapshot_urban_airship_key }}'
+      secret: '{{ staging_snapshot_urban_airship_secret }}'
+    open_registration:  # allow open registration for roadtest when programCode is "2"
+      enabled: true
+      custom_data_condition:
+        field_name: "programCode"
+        field_values:
+          - "2"
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: American Family UBI
+    app_name: American Family Insurance
+    app_download_copy: Download the American Family Insurance app. Reply with STOP
+      to opt out of future text messages.
+    description: American Family
+    twilio_from_number: '+12062077023'
+    company_id: 0a062d61-1c93-4717-8800-a48ff2378b28
+    score_system: amfam
+    sftp_username: AmFamUBI
+    ssh_pub_key: internal-test.pub
+    customer_code: amfam-ubi
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: false
+    is_tmfb: false
+    is_fleet_service: false
+    invite_on_retry: true
+    first_registration_reminder_copy: Remember to download the American Family Insurance
+      app. Reply with STOP to opt out of future text messages.
+    second_registration_reminder_copy: Final reminder to download the American Family
+      Insurance app. Reply with STOP to opt out of future text messages.
+    show_cancelled_state: true
+    base_discount_rate: 5.0
+    messages:
+      not_registered_or_enrolled: Your KnowYourDrive account is not yet active. You
+        will receive a text message to complete setup on your American Family policy’s
+        effective date.
+    preconfigured_sms_send:
+      enabled: true
+      messages:
+        7: American Family Insurance here! We noticed your KnowYourDrive app isn't
+          communicating with us. To fix this, log in to the KnowYourDrive app today.
+        14: American Family Insurance again! We noticed your KnowYourDrive app isn't
+          communicating with us. To keep your discount, log in to the KnowYourDrive
+          app today.
+        21: Hey there! If you're still interested in the American Family Insurance
+          KnowYourDrive program, you'll need to log in to the KnowYourDrive app today
+          or the discount will be removed.
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    require_phone_number: false
+    require_designation: true
+    enrollment_validator: PartialHouseholdValidator
+    reminder_start_with_monitoring: true
+    urban_airship:
+      key: '{{ staging_amfam_test_urban_airship_key }}'
+      secret: '{{ staging_amfam_test_urban_airship_secret }}'
+    additional_driver_profile_fields_from_enrollment:
+      - first_name
+      - last_name
+      - designation
+    additional_driver_status_fields:
+      - DaysActivelyParticipating
+      - ConsecutiveDaysNotActivelyParticipating
+    permissions_required_to_collect_trips:
+      ios:
+       - gps_loc
+       - activity_perm
+       - pedometer_perm
+      android:
+       - gps_loc
+       - phone_call_perm
+
+  - name: Rideshare SDK Test
+    app_name: Rideshare SDK Test
+    app_download_copy: Download the Lyft app
+    description: TrueMotion test company for Lyft environment
+    company_id: 8ec88d8a-5b2c-45f7-aafe-8584276141c1
+    twilio_from_number: ''
+    score_system: default
+    sftp_username: RideshareSDKTest
+    ssh_pub_key: internal-test.pub
+    customer_code: rideshare-sdk-test
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: false
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: false
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: "GEICO"
+    app_name: "GEICO "
+    opt_in_request:
+      en-US: "Don’t miss out on savings! Reply YES in 24 hours to complete your DriveEasy text enrollment."
+    app_download_copy:
+      en-US: "Welcome to DriveEasy! Follow this link to download the app and start the program https://bit.ly/DriveEasyDownload"
+    app_download_copy_forward:
+      en-US: "{FirstName} {LastName} has been added to your policy. Open the DriveEasy app and send them an invite to keep your discount"
+    description: "GEICO"
+    twilio_from_number: '+12408001734'
+    company_id: "92a693a8-feba-474d-92da-ee727b720aa2"
+    score_system: "default"
+    sftp_username: "GEICO"
+    ssh_pub_key: internal-test.pub
+    customer_code: "geico-test"
+    jwt_public_key: internal_test_jwt_pub.pem
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    # invitation_delay: 300
+    pgp_key: ""
+    pgp_recipient: ""
+    supported_locales:
+     - "en-US"
+    first_registration_reminder_copy:
+      en-US: "Don't forget to download the DriveEasy app! Follow this link to download the app and get started: https://bit.ly/DriveEasyDownload"
+    second_registration_reminder_copy:
+      en-US: "It's time to download the DriveEasy app. Follow this link to get started: https://bit.ly/DriveEasyDownload"
+    default_reply_copy:
+      en-US: "Thank you for reaching out! If you need assistance with your auto policy or DriveEasy, please call GEICO at 1-800-841-3000."
+    help_reply_copy:
+      en-US: "Need help? Check out the DriveEasy text FAQs and contact information: http://bit.ly/DriveEasySMS or call 877-273-1307. Reply STOP to unsubscribe."
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    require_designation: true
+    require_phone_number: false
+    require_policy_id: true
+    enrollment_validator: PolicyPrimaryValidator
+    additional_driver_status_fields_from_enrollment:
+      - "EnrollmentMode"
+      - "PhoneNumber"
+      - "PolicyID"
+      - "ScoreProvider"
+    use_score_ingest_via_s3: true
+    score_ingest_input_transform: generic_csv
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    base_discount_rate: 5.0
+    opt_in_policy: force
+    max_num_trip_files_per_aggregate: 50
+    max_num_raw_files_per_aggregate: 50
+    permissions_required_to_collect_trips:
+      ios:
+       - gps_loc
+       - activity_perm
+       - pedometer_perm
+      android:
+       - gps_loc
+       - phone_call_perm
+    additional_driver_status_fields:
+     - TextConsentFrom
+     - DaysCapableOfCollectingTrips
+     - ConsecutiveDaysNotCapableOfCollectingTrips
+    custom_data_fields:
+      - has_roadside
+    urban_airship:
+      key: '{{ staging_geico_test_urban_airship_key }}'
+      secret: '{{ staging_geico_test_urban_airship_secret }}'
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: "UBI3 Test"
+    app_name: "UBI3 Test"
+    app_download_copy:
+      en-US: "Download the UBI3 Test app"
+    app_download_copy_forward:
+      en-US: "{FirstName} {LastName} has been added to your policy"
+    description: "UBI3 Test"
+    twilio_from_number: '+12063505738'
+    company_id: "def027a1-4482-457a-88f7-89a80ffc291d"
+    score_system: "default"
+    sftp_username: "UBI3Test"
+    ssh_pub_key: internal-test.pub
+    customer_code: "ubi3-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: "qa-test-key.pgp"
+    pgp_recipient: "qa@gotruemotion.com"
+    jwt_public_key: internal_test_jwt_pub.pem
+    supported_locales:
+     - "en-US"
+    first_registration_reminder_copy:
+      en-US: "First reminder to download the UBI3 Test app"
+    first_registration_reminder_copy_forward:
+      en-US: "First reminder for {FirstName} to download the UBI3 Test app"
+    second_registration_reminder_copy:
+      en-US: "Final reminder to download the UBI3 Test app"
+    second_registration_reminder_copy_forward:
+      en-US: "Final reminder for {FirstName} to download the UBI3 Test app"
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    use_score_ingest_via_s3: true
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: true
+    sms_forward_policy: "to_primary"
+    custom_data_fields:
+      - crashEligibility
+
+  - name: "PGR Test"
+    app_name: "PGR Test"
+    app_download_copy:
+      en-US: "Download the UBI3 Test app"
+    app_download_copy_forward:
+      en-US: "{FirstName} {LastName} has been added to your policy"
+    description: "UBI3 Test"
+    twilio_from_number: '+12063505738'
+    company_id: "1113ae29-aa56-41fb-a95f-e42788f2016c"
+    score_system: "default"
+    sftp_username: "UBI3Test"
+    ssh_pub_key: internal-test.pub
+    customer_code: "ubi3-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: "qa-test-key.pgp"
+    pgp_recipient: "qa@gotruemotion.com"
+    supported_locales:
+      - "en-US"
+    first_registration_reminder_copy:
+      en-US: "First reminder to download the UBI3 Test app"
+    first_registration_reminder_copy_forward:
+      en-US: "First reminder for {FirstName} to download the UBI3 Test app"
+    second_registration_reminder_copy:
+      en-US: "Final reminder to download the UBI3 Test app"
+    second_registration_reminder_copy_forward:
+      en-US: "Final reminder for {FirstName} to download the UBI3 Test app"
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: false
+    use_raw_data_delivery_via_s3: false
+    legacy_monitoring_period: true
+    expect_enrollment_during_verify: true
+    sms_forward_policy: "to_primary"
+    custom_data_fields:
+      - ratedDistractedDriving
+      - summarizationMethod
+      - programCode
+      - showInvitationScreen
+      - invitationScreenType
+      - crashEligibility
+    urban_airship:
+      key: '{{ staging_snapshot_test_urban_airship_key }}'
+      secret: '{{ staging_snapshot_test_urban_airship_secret }}'
+    open_registration:  # allow open registration for roadtest when programCode is "2"
+      enabled: true
+      custom_data_condition:
+        field_name: "programCode"
+        field_values:
+          - "2"
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: "UBI3 Reprocess Test"
+    app_name: "UBI3 Reprocess Test"
+    app_download_copy:
+      en-US: "Download the UBI3 Reprocess Test app"
+    app_download_copy_forward:
+      en-US: "{FirstName} {LastName} has been added to your policy"
+    description: "UBI3 Reprocess Test"
+    twilio_from_number: '+12063505738'
+    company_id: "f98433c7-de12-4166-bdc5-3cf436c8cb03"
+    score_system: "default"
+    sftp_username: "UBI3Test"
+    ssh_pub_key: internal-test.pub
+    customer_code: "ubi3-reprocess-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: "qa-test-key.pgp"
+    pgp_recipient: "qa@gotruemotion.com"
+    jwt_public_key: internal_test_jwt_pub.pem
+    supported_locales:
+     - "en-US"
+    first_registration_reminder_copy:
+      en-US: "First reminder to download the UBI3 Reprocess Test app"
+    first_registration_reminder_copy_forward:
+      en-US: "First reminder for {FirstName} to download the UBI3 Reprocess Test app"
+    second_registration_reminder_copy:
+      en-US: "Final reminder to download the UBI3 Reprocess Test app"
+    second_registration_reminder_copy_forward:
+      en-US: "Final reminder for {FirstName} to download the UBI3 Reprocess Test app"
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: false
+    use_raw_data_delivery_via_s3: false
+
+  - name: "TrueMotion Business"
+    app_name: "TrueMotion Business"
+    app_download_copy:
+      en-US: "Download the TrueMotion Business app"
+    description: "Our app which uses advanced signal processing, machine learning, and data science to turn sensor data into meaningful driving insights."
+    twilio_from_number: "+16176225149"
+    company_id: "721711bd-8d76-4316-b6a3-9373c9d06c80"
+    score_system: "default"
+    sftp_username: "TrueMotionBusiness"
+    ssh_pub_key: internal-test.pub
+    customer_code: "ubi3-truemotion-business"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    supported_locales:
+      - "en-US"
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: false
+    use_raw_data_delivery_via_s3: false
+
+  # This company is used by the integration tests. Please message the #automation-team channel in Slack before making any changes to this config.
+  - name: "Farmers Test"
+    app_name: "Farmers"
+    supported_locales:
+      - "en-US"
+    confirmation_sms_copy:
+      en-US: "Your Signal code is {code}"
+    app_download_copy:
+      en-US: "Please download the Signal app <LINK>"
+    app_download_copy_forward:
+      en-US: "{FirstName} has been added to your policy. You can invite new driver using the app"
+    first_registration_reminder_copy:
+      en-US: "Please don’t forget to download the Signal app <LINK>"
+    first_registration_reminder_copy_forward:
+      en-US: "{FirstName} still hasn’t been registered! You can resend the invite using the app"
+    second_registration_reminder_copy:
+      en-US: "You still haven’t downloaded the Signal app <LINK>"
+    second_registration_reminder_copy_forward:
+      en-US: "Please make sure {FirstName} register by sending a new invite using the app."
+    default_reply_copy:
+      en-US: "You are subscribed to Signal account alerts. Msg&data rates may apply. 1 message/user request. Reply HELP for help."
+    opt_out_reply_copy:
+      en-US: "You are unsubscribed from Signal account alerts. No more messages will be sent. Reply HELP for help."
+    help_reply_copy:
+      en-US: "Account alerts for Signal. Msg&data rates may apply. 1 message/user request. Text STOP to cancel."
+    description: Farmers
+    twilio_from_number: "+12063505738"
+    company_id: "92e67558-d068-445a-907f-2716a8483f18"
+    score_system: "default"
+    sftp_username: Farmers
+    ssh_pub_key: ""
+    customer_code: "farmers-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    is_tmfb: false
+    base_discount_rate: 5.0
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: true
+    use_raw_data_delivery_via_s3: false
+    use_report_ingest_via_s3: true
+    report_ingest_summary_email: "qa@gotruemotion.com"
+    send_aggregate_manifest: false
+    designation_whitelist_for_registration_messages:
+      - "PRIMARY"
+    additional_driver_status_fields_from_enrollment:
+      - "PolicyID"
+      - "PhoneNumber"
+      - "CustomData"
+      - "EnrollmentMode"
+    additional_driver_status_fields:
+      - "DriverTripCount"
+    custom_data_fields:
+      - "isAgent"
+      - "DriverID"
+      - "DriverScore"
+      - "AnnualMileage"
+      - "TotalNumDays"
+      - "TotalNumTrips"
+      - "TotalDuration"
+      - "TotalMiles"
+      - "TotalPhoneUsageDuration"
+      - "TotalHandheldPhoneCallDuration"
+      - "TotalHandsfreePhoneCallDuration"
+      - "TotalLoudspeakerCallDuration"
+      - "TotalWiredHeadsetCallDuration"
+      - "TotalSpeedingDuration"
+      - "TotalNumHardBrakes"
+      - "TotalTimeOfDayFactor"
+      - "CardTitle"
+      - "CardSubtitle1"
+      - "CardBody1"
+      - "CardHasButton1"
+      - "CardButtonTitle1"
+      - "CardUrl1"
+      - "CardExpiryDate1"
+      - "CardSubtitle2"
+      - "CardBody2"
+      - "CardHasButton2"
+      - "CardButtonTitle2"
+      - "CardUrl2"
+      - "CardExpiryDate2"
+      - "CardSubtitle3"
+      - "CardBody3"
+      - "CardHasButton3"
+      - "CardButtonTitle3"
+      - "CardUrl3"
+      - "CardExpiryDate3"
+    predicted_discount_url: 'https://api-np1.farmersinsurance.com/PCREG/driverms/v1/drivers/{driver_id}/discounts'
+    predicted_discount_key: '{{ farmers_predicted_discount_key }}'
+    predicted_discount_secret: '{{ farmers_predicted_discount_secret }}'
+    predicted_discount_region: 'RA11'
+    predicted_discount_pkcs12_data: '{{ farmers_predicted_discount_pkcs12_data }}'
+    predicted_discount_pkcs12_password: '{{ farmers_predicted_discount_pkcs12_password }}'
+    predicted_discount_certs:
+      - "TrustedRoot.crt"
+      - "DigiCertCA2.crt"
+      - "api-np1_farmersinsurance_com.crt"
+    urban_airship:
+      key: '{{ staging_farmers_test_urban_airship_key }}'
+      secret: '{{ staging_farmers_test_urban_airship_secret }}'
+    preconfigured_sms_send:
+      enabled: true
+      messages:
+        7: Farmers Insurance here!
+
+  - name: "Rewards Service Testing"
+    app_name: "Rewards Service"
+    app_download_copy: "Download the Rewards Service App"
+    description: "Rewards Service testing company"
+    twilio_from_number: "+16172022037"
+    company_id: 14882b65-6ae9-4033-a341-eecedba5e7bc
+    score_system: "default"
+    sftp_username: rewards
+    ssh_pub_key: internal-test.pub
+    customer_code: "rewards-service-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    use_csv: false
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    base_discount_rate: 5.0
+    send_device_sensor_info: true
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: false
+    use_raw_data_delivery_via_s3: false
+
+  - name: "LBF Test"
+    app_name: "LBF"
+    description: "LBF test company"
+    company_id: "cdf4c109-d7e1-4e4f-883c-0208a8b541a9"
+    score_system: "default"
+    twilio_from_number: "+12408001734"
+    sftp_username: "lbf-test"
+    ssh_pub_key: ''
+    customer_code: "lbf-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    use_csv: false
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    is_tmfb: false
+    is_fleet_service: false
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: false
+    use_raw_data_delivery_via_s3: false
+    supported_locales:
+      - "en-US"
+      - "da-DK"
+    confirmation_sms_copy:
+      en-US: "Your Bilist+ Code is {code}"
+      da-DK: "Din Bilist+ kode er {code}"
+    app_download_copy:
+      en-US: "Please download the Bilist+ app <LINK>"
+      da-DK: "Tak for din tilmelding til Bilist+ Hent appen her: <LINK> Svar STOP for at afmelde SMS'er."
+    first_registration_reminder_copy:
+      en-US: "Bilist+ Reminder: Download the Bilist+ app to get started. Questions? bizsupport@gotruemotion.com <LINK>"
+      da-DK: "Husk at hente Bilist+ appen for at optjene rabat på din selvrisiko: <LINK> Svar STOP for at afmelde SMS'er."
+    second_registration_reminder_copy:
+      en-US: "You still haven’t downloaded the Bilist+ app <LINK>"
+      da-DK: "Sidste påmindelse! Husk at hent Bilist+ appen for at optjene rabat på din selvrisiko: <LINK> Svar STOP for at afmelde SMS'er."
+    default_trip_reminder_copy:
+      en-US: "Bilist+ Reminder: It's been 14 days since your last trip. Make sure the app is installed and location permissions are turned on."
+      da-DK: "Det er 14 dage, siden Bilist+ sidst registrerede, at du kørte bil. Hvis det er en fejl, så tjek om du stadig har den installeret, og tjek, at den har de nødvendige tilladelser. <LINK>"
+    urban_airship:
+      key: '{{ staging_lbf_test_urban_airship_key }}'
+      secret: '{{ staging_lbf_test_urban_airship_secret }}'
+    emit_event_for_days_in_program:
+      - 7
+      - 30
+
+  - name: "GEICO Load Testing"
+    app_name: "GEICO Load Testing"
+    app_download_copy: "Download the app"
+    description: "GEICO"
+    twilio_from_number: '+16172022037'
+    company_id: "41c494ba-921e-42d5-957b-fe84959863a6"
+    score_system: "default"
+    sftp_username: "geico-load"
+    ssh_pub_key: internal-test.pub
+    customer_code: "geico-load-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: ""
+    pgp_recipient: ""
+    jwt_public_key: internal_test_jwt_pub.pem
+    is_tmfb: false
+    is_fleet_service: false
+    show_cancelled_state: true
+    require_designation: true
+    require_phone_number: false
+    require_policy_id: true
+    enrollment_validator: PolicyPrimaryValidator
+    additional_driver_status_fields_from_enrollment:
+      - "EnrollmentMode"
+      - "PhoneNumber"
+      - "PolicyID"
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: false
+    use_raw_data_delivery_via_s3: false
+    base_discount_rate: 5.0
+    opt_in_policy: force
+    permissions_required_to_collect_trips:
+      ios:
+       - gps_loc
+       - activity_perm
+       - pedometer_perm
+      android:
+       - gps_loc
+       - phone_call_perm
+    additional_driver_status_fields:
+     - TextConsentFrom
+     - DaysCapableOfCollectingTrips
+     - ConsecutiveDaysNotCapableOfCollectingTrips
+    custom_data_fields:
+      - has_roadside
+
+  - name: "Farmers Enrollment Test"
+    app_name: "Farmers Enrollment Test"
+    app_download_copy:  "Please download the app"
+    description: "Farmers enrollment file test"
+    twilio_from_number: "+12063093595"
+    company_id: "f19ce353-bf67-4acd-9c45-4f3ee40c34e5"
+    score_system: "default"
+    sftp_username: "farmers-enrollment-test"
+    ssh_pub_key: ""
+    customer_code: "farmers-enrollment-test"
+    ingestion_summary_notify_email: "qa@gotruemotion.com"
+    pgp_key: ''
+    pgp_recipient: ''
+    jwt_public_key: internal_test_jwt_pub.pem
+    is_tmfb: false
+    require_phone_number: false
+    base_discount_rate: 5.0
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: true
+    use_trip_data_delivery_via_s3: false
+    use_raw_data_delivery_via_s3: false
+    use_report_ingest_via_s3: true
+    report_ingest_summary_email: "qa@gotruemotion.com"
+    additional_driver_status_fields_from_enrollment:
+      - "PolicyID"
+      - "PhoneNumber"
+      - "CustomData"
+    additional_driver_status_fields:
+      - "DriverTripCount"
+    custom_data_fields:
+      - "isAgent"
+      - "DriverID"
+      - "DriverScore"
+      - "TotalNumDays"
+      - "TotalNumTrips"
+      - "TotalDuration"
+      - "TotalMiles"
+      - "TotalPhoneUsageDuration"
+      - "TotalHandheldPhoneCallDuration"
+      - "TotalHandsfreePhoneCallDuration"
+      - "TotalLoudspeakerCallDuration"
+      - "TotalWiredHeadsetCallDuration"
+      - "TotalSpeedingDuration"
+      - "TotalNumHardBrakes"
+      - "TotalTimeOfDayFactor"
+
+  - name: Grange
+    app_name: OnTrack
+    app_download_copy: 'Thanks for signing up for OnTrack by Grange Insurance! Download
+      the app to start driving: http://onelink.to/ontrack'
+    description: OnTrack by Grange
+    twilio_from_number: '+12063505738'
+    company_id: f2e64d6f-8501-42f2-872d-e6c10e04f5a0
+    score_system: wtw
+    sftp_username: Grange
+    ssh_pub_key: grange-test.pub
+    customer_code: grange-test
+    ingestion_summary_notify_email: qa@gotruemotion.com
+    pgp_key: ''
+    pgp_recipient: ''
+    is_tmfb: false
+    is_fleet_service: false
+    first_registration_reminder_copy: 'Remember to download OnTrack by Grange Insurance
+      and start driving: http://onelink.to/ontrack\nReply “STOP” to cancel. Msg &
+      data rates may apply.'
+    second_registration_reminder_copy: 'Final reminder! Download the OnTrack app by
+      Grange Insurance: http://onelink.to/ontrack\nReply “STOP” to cancel. Msg & data
+      rates may apply.'
+    confirmation_sms_copy: Your OnTrack code is {code}.
+    messages:
+      not_registered_or_enrolled: This phone number is not enrolled for OnTrack.
+    show_cancelled_state: true
+    custom_data_fields:
+      - PolicySymbol
+    use_score_ingest_via_s3: false
+    use_enrollment_via_s3: false
+    use_raw_data_delivery_via_s3: false
+    urban_airship:
+      key: '{{ staging_grange_test_urban_airship_key }}'
+      secret: '{{ staging_grange_test_urban_airship_secret }}'
+    emit_event_for_days_in_program:
+      - 7
+      - 30
+      - 60
+
+ubi3_deploy_score_ingest_sftp: true
+ubi3_enroll_version: '*'
+ubi3_enroll_package_name_postfix: '' #Use this to install custom named packages built from feature branches, DO NOT MERGE TO MASTER
+ubi3_enroll_pgp_private_key: enrollment-test
+ubi3_enroll_pgp_private_key_fingerprint: E246FC27
+ubi3_deploy_report_ingest_sftp: true
+
+additional_customer_pgp_keys: []
+
+mojo_customers:
+  - name: Mojo
+    company_id: f4476bf2-9284-4fa4-ab37-17e7d4c7b858
+    urban_airship:
+      key: '{{ staging_mojo_urban_airship_key }}'
+      secret: '{{ staging_mojo_urban_airship_secret }}'
+
+# use some fake configs just so we have the structure visible. this is staging and only used by pushit
+tmfa_urban_airship:
+  key: '{{ staging_tmfa_urban_airship_key }}'
+  secret: '{{ staging_tmfa_urban_airship_secret }}'
+
+tmb_urban_airship:
+  key: '{{ staging_tmb_urban_airship_key }}'
+  secret: '{{ staging_tmb_urban_airship_secret }}'
+
+snapshot_urban_airship:
+  key: '{{ staging_snapshot_urban_airship_key }}'
+  secret: '{{ staging_snapshot_urban_airship_secret }}'
+
+tmc_urban_airship:
+  key: '{{ staging_tmc_urban_airship_key }}'
+  secret: '{{ staging_tmc_urban_airship_secret }}'
+
+bruce_aggregate_cron_state: absent
+
+apps: {}
+
+#consul_version: "0.7.5.6"
+consul_version: "1.3.1.12"

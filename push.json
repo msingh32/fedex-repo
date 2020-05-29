@@ -1,0 +1,1852 @@
+[
+  {
+    "trigger": "rewards_service.period_elapsed",
+    "origin": "*",
+    "category": "reward_messages",
+    "push_notification_config_id": "putitdown_arm_4",
+    "name": "putitdown_arm_4_reward_period_elapsed_high_performer_incentive",
+    "company_id": "*",
+    "criteria": {
+      "comparands": [
+        {
+          "value": "performance_grade",
+          "operator": "greater_than",
+          "threshold": 90
+        }
+      ]
+    },
+    "copy": "Great job at putting the 📱 down! More weeks like this give you a higher chance of earning 💰 at the end of the study."
+  },
+  {
+    "origin": "v3",
+    "trigger": "discount.created",
+    "category": "discount_created",
+    "name": "farmers_discount_created",
+    "company_id": "92e67558-d068-445a-907f-2716a8483f18",
+    "copy": "Nice driving! You've earned a discount on your car insurance. Open Signal® to see what it is.",
+    "deeplink": "https://9r6dlb.trmo.co/telematics/tabBar/renewalDiscount"
+  },
+  {
+    "origin": "mojo",
+    "trigger": "trip.processed",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_no_distraction",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        },
+        {
+          "operator": "equals",
+          "threshold": 0,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "less_than",
+          "threshold": 1200,
+          "value": "time_since_trip_end_seconds"
+        }
+      ]
+    },
+    "copy": "🏆🏆 Perfect Drive! You had ZERO distraction on your last trip. And you earned {distraction_free_minutes} distraction-free minutes toward your next spin.",
+    "deeplink": "https://gotruemotion.com/mojo/"
+  },
+  {
+    "origin": "mojo",
+    "trigger": "trip.processed",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_0_to_10_distraction",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": 10,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        },
+        {
+          "operator": "less_than",
+          "threshold": 1200,
+          "value": "time_since_trip_end_seconds"
+        }
+      ]
+    },
+    "copy": "📵 👍 Not bad! You kept phone use to a minimum on this trip and racked up {distraction_free_minutes} distraction-free minutes.",
+    "deeplink": "https://gotruemotion.com/mojo/"
+  },
+  {
+    "origin": "mojo",
+    "trigger": "trip.processed",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_20_or_more_distraction",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "less_than",
+          "threshold": 1200,
+          "value": "time_since_trip_end_seconds"
+        }
+      ]
+    },
+    "copy": "😞 You used your phone {phone_usage_percent}% of this trip which increases your risk of a crash. Reduce phone use to rack up distraction-free minutes faster.",
+    "deeplink": "https://gotruemotion.com/mojo/"
+  },
+  {
+    "origin": "mojo",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "weekly_high_phone_usage",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        }
+      ]
+    },
+    "copy": "📵 You used your phone for {phone_usage_percent}% of your driving time this week which increased your risk of an accident. Next week try to stow your phone while driving.",
+    "deeplink": "https://gotruemotion.com/mojo/"
+  },
+  {
+    "origin": "mojo",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "weekly_low_phone_usage",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        }
+      ]
+    },
+    "copy": "🏁 Nice job minimizing phone use while driving this week! You racked up {distraction_free_minutes} minutes of distraction-free driving this week.",
+    "deeplink": "https://gotruemotion.com/mojo/"
+  },
+  {
+    "origin": "mojo",
+    "trigger": "mojo.new_follow",
+    "category": "new_follower",
+    "name": "new_follower",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "copy": "😊 {friends_first_name} {friends_last_name} just followed you on Safe Travels. Follow them back to compete on the leaderboard for least distracted driver.",
+    "deeplink": "https://gotruemotion.com/mojo/followers"
+  },
+  {
+    "origin": "mojo",
+    "trigger": "mojo.new_level",
+    "category": "new_level",
+    "name": "new_level",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "copy": "🏅🏅 Way to go! You just leveled up. Keep driving distraction-free to level up faster.",
+    "deeplink": "https://gotruemotion.com/mojo/level"
+  },
+  {
+    "origin": "mojo",
+    "trigger": "mojo.new_spin",
+    "category": "new_spin",
+    "name": "new_spin",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "copy": "🎁🎁 Boom! You just won a new spin for driving {distraction_minutes_per_spin} minutes distraction-free. Go spin!",
+    "deeplink": "https://gotruemotion.com/mojo/spin",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "spin_source_distraction_free_minutes",
+          "value": "source"
+        }
+      ]
+    }
+  },
+  {
+    "origin": "mojo",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_no_distraction",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "trigger": "trip.processed",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        },
+        {
+          "operator": "equals",
+          "threshold": 0,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "less_than",
+          "threshold": 1200,
+          "value": "time_since_trip_end_seconds"
+        }
+      ]
+    },
+    "deeplink": "https://gotruemotion.com/mojo/",
+    "copy": "🏆🏆 Perfect Drive! You had ZERO distraction on your last trip. And you earned {distraction_free_minutes} distraction-free minutes toward your next spin."
+  },
+  {
+    "origin": "mojo",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_0_to_10_distraction",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "trigger": "trip.processed",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": 10,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        },
+        {
+          "operator": "less_than",
+          "threshold": 1200,
+          "value": "time_since_trip_end_seconds"
+        }
+      ]
+    },
+    "deeplink": "https://gotruemotion.com/mojo/",
+    "copy": "📵 👍 Not bad! You kept phone use to a minimum on this trip and racked up {distraction_free_minutes} distraction-free minutes."
+  },
+  {
+    "origin": "mojo",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_20_or_more_distraction",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "trigger": "trip.processed",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "less_than",
+          "threshold": 1200,
+          "value": "time_since_trip_end_seconds"
+        }
+      ]
+    },
+    "deeplink": "https://gotruemotion.com/mojo/",
+    "copy": "😞 You used your phone {phone_usage_percent}% of this trip which increases your risk of a crash. Reduce phone use to rack up distraction-free minutes faster."
+  },
+  {
+    "origin": "mojo",
+    "category": "weekly_summary",
+    "name": "weekly_high_phone_usage",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        }
+      ]
+    },
+    "deeplink": "https://gotruemotion.com/mojo/",
+    "copy": "📵 You used your phone for {phone_usage_percent}% of your driving time this week which increased your risk of an accident. Next week try to stow your phone while driving."
+  },
+  {
+    "origin": "mojo",
+    "category": "weekly_summary",
+    "name": "weekly_low_phone_usage ",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        }
+      ]
+    },
+    "deeplink": "https://gotruemotion.com/mojo/",
+    "copy": "🏁 Nice job minimizing phone use while driving this week! You racked up {distraction_free_minutes} minutes of distraction-free driving this week."
+  },
+  {
+    "origin": "mojo",
+    "category": "new_follower",
+    "name": "new_follower",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "trigger": "mojo.new_follow",
+    "deeplink": "https://gotruemotion.com/mojo/followers",
+    "copy": "😊 {friends_first_name} {friends_last_name} just followed you on Mojo. Follow them back to compete on the leaderboard for least distracted driver."
+  },
+  {
+    "origin": "mojo",
+    "category": "new_level",
+    "name": "new_level",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "trigger": "mojo.new_level",
+    "deeplink": "https://gotruemotion.com/mojo/level",
+    "copy": "🏅🏅 Way to go! You just leveled up. Keep driving distraction-free to level up faster."
+  },
+  {
+    "origin": "mojo",
+    "category": "new_spin",
+    "name": "new_spin",
+    "company_id": "f4476bf2-9284-4fa4-ab37-17e7d4c7b858",
+    "trigger": "mojo.new_spin",
+    "deeplink": "https://gotruemotion.com/mojo/spin",
+    "copy": "🎁🎁 Boom! You just won a new spin for driving {distraction_minutes_per_spin} minutes distraction-free. Go spin!"
+  },
+  {
+    "origin": "v3-trials",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_no_distraction",
+    "company_id": "449e7ead-f024-4872-922f-80619b1faeb3",
+    "trigger": "trip.processed",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        },
+        {
+          "operator": "equals",
+          "threshold": 0,
+          "value": "phone_usage_percent"
+        }
+      ]
+    },
+    "copy": "🏆🏆 Perfect Drive! You had ZERO distraction on your last trip. Keep it up."
+  },
+  {
+    "origin": "v3-trials",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_0_to_10_distraction",
+    "company_id": "449e7ead-f024-4872-922f-80619b1faeb3",
+    "trigger": "trip.processed",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": 10,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        }
+      ]
+    },
+    "copy": "📵 👍 Not bad! You kept phone use to a minimum on this trip. Reduce phone use to improve your score and your safety."
+  },
+  {
+    "origin": "v3-trials",
+    "category": "post_trip_summary",
+    "name": "post_trip_summary_20_or_more_distraction",
+    "company_id": "449e7ead-f024-4872-922f-80619b1faeb3",
+    "trigger": "trip.processed",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        },
+        {
+          "operator": "greater_than_equals",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        }
+      ]
+    },
+    "copy": "😞 You used your phone {phone_usage_percent}% of this trip which increases your risk of a crash. Reduce phone use to improve your score."
+  },
+  {
+    "origin": "v3-trials",
+    "category": "post_trip_summary",
+    "name": "post_trip_high_braking",
+    "company_id": "449e7ead-f024-4872-922f-80619b1faeb3",
+    "trigger": "trip.processed",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": 2,
+          "value": "hard_brake_count"
+        },
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_driver"
+        }
+      ]
+    },
+    "copy": "😞 That wasn’t your safest trip. Keep hard brakes to a minimum to lower your risk of getting into an accident."
+  },
+  {
+    "origin": "v3-trials",
+    "category": "weekly_summary",
+    "name": "weekly_high_phone_usage",
+    "company_id": "449e7ead-f024-4872-922f-80619b1faeb3",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        }
+      ]
+    },
+    "copy": "📵 You used your phone for {phone_usage_percent}% of your driving time this week which increased your risk of an accident. Next week try to stow your phone while driving."
+  },
+  {
+    "origin": "v3-trials",
+    "category": "weekly_summary",
+    "name": "weekly_low_phone_usage ",
+    "company_id": "449e7ead-f024-4872-922f-80619b1faeb3",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": 20,
+          "value": "phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        }
+      ]
+    },
+    "copy": "🏁 Nice job minimizing phone use while driving this week!"
+  },
+  {
+    "origin": "tmfa",
+    "category": "post_trip_summary",
+    "name": "active_learning",
+    "company_id": "b0a93926-d412-49d6-8237-4c20c3e844fa",
+    "trigger": "trip.processed",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": 0.6,
+          "value": "operator_mode_certainty"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0.4,
+          "value": "operator_mode_certainty"
+        }
+      ]
+    },
+    "deeplink": "https://trmo.co/tmfa/trip/{trip_id}/corrections",
+    "copy": "Help improve your trip predictions! On your trip that ended at {trip_end_time_formatted}, were you driving?"
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_weekly_family_role_teen",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        },
+        {
+          "operator": "equals",
+          "threshold": "teen",
+          "value": "family_role"
+        }
+      ]
+    },
+    "copy": [
+      "You're a teen and you drove last week"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_weekly_family_role_parent",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        },
+        {
+          "operator": "equals",
+          "threshold": "parent",
+          "value": "family_role"
+        }
+      ]
+    },
+    "copy": [
+      "You're a parent and you drove last week"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_localtime_trigger_tue_et",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_tue_7am_et",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "-0500",
+          "value": "last_trip_end_tz"
+        }
+      ]
+    },
+    "copy": [
+      "You're in the Eastern Time zone, and it's 7am Tuesday!"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_localtime_trigger_tue_ct",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_tue_7am_ct",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "-0600",
+          "value": "last_trip_end_tz"
+        }
+      ]
+    },
+    "copy": [
+      "You're in the Central Time zone, and it's 7am Tuesday!"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_localtime_trigger_tue_mt",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_tue_7am_mt",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "-0700",
+          "value": "last_trip_end_tz"
+        }
+      ]
+    },
+    "copy": [
+      "You're in the Mountain Time zone, and it's 7am Tuesday!"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_localtime_trigger_tue_pt",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_tue_7am_pt",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "-0800",
+          "value": "last_trip_end_tz"
+        }
+      ]
+    },
+    "copy": [
+      "You're in the Pacific Time zone, and it's 7am Tuesday!"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_localtime_trigger_thu_et",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_thu_7am_et",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "-0500",
+          "value": "last_trip_end_tz"
+        }
+      ]
+    },
+    "copy": [
+      "You're in the Eastern Time zone, and it's 7am Thursday!"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_localtime_trigger_thu_ct",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_thu_7am_ct",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "-0600",
+          "value": "last_trip_end_tz"
+        }
+      ]
+    },
+    "copy": [
+      "You're in the Central Time zone, and it's 7am Thursday!"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_localtime_trigger_thu_mt",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_thu_7am_mt",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "-0700",
+          "value": "last_trip_end_tz"
+        }
+      ]
+    },
+    "copy": [
+      "You're in the Mountain Time zone, and it's 7am Thursday!"
+    ]
+  },
+  {
+    "origin": "tmfa",
+    "category": "weekly_summary",
+    "name": "test_localtime_trigger_thu_pt",
+    "company_id": "*",
+    "trigger": "scheduled.weekly_thu_7am_pt",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "-0800",
+          "value": "last_trip_end_tz"
+        }
+      ]
+    },
+    "copy": [
+      "You're in the Pacific Time zone, and it's 7am Thursday!"
+    ]
+  },
+  {
+    "origin": "v3",
+    "trigger": "trip.processed",
+    "category": "post_trip_summary",
+    "name": "post_trip_score_ready",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 5,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "Your score is ready! Open the app to check it out!"
+  },
+  {
+    "origin": "v3",
+    "trigger": "driver_report.created",
+    "category": "new_report",
+    "name": "new_preview_to_live_report",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "send_push"
+        },
+        {
+          "operator": "equals",
+          "threshold": "PreviewToLive",
+          "value": "report_type"
+        }
+      ]
+    },
+    "copy": "Welcome to your discount program! Tap here for details.",
+    "deeplink": "https://df2u0e.trmo.co/telematics/home"
+  },
+  {
+    "origin": "v3",
+    "trigger": "driver_report.created",
+    "category": "new_report",
+    "name": "new_sunset_report",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "send_push"
+        },
+        {
+          "operator": "equals",
+          "threshold": "Sunset",
+          "value": "report_type"
+        }
+      ]
+    },
+    "copy": "Your discount is ready! The results are in!",
+    "deeplink": "https://trmo.co/geico/report?reportId={report_id}"
+  },
+  {
+    "origin": "v3",
+    "trigger": "driver_report.created",
+    "category": "new_report",
+    "name": "new_miscellaneous_report",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "send_push"
+        },
+        {
+          "operator": "equals",
+          "threshold": "Miscellaneous",
+          "value": "report_type"
+        }
+      ]
+    },
+    "copy": "",
+    "deeplink": "https://trmo.co/geico/report?reportId={report_id}"
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "first_trips_complete_streak",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 5,
+          "value": "driver_trip_count"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "You've logged 5 trips! Take a look at your data."
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "current_streak_10",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 10,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "10 in a row! You just hit ten straight distraction free trips and are now in SILVER territory. Go for GOLD at 15!"
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "current_streak_15",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 15,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "You're golden! Congrats on 15 straight trips without distraction. How high can you go?"
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "anti_streak_5",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 5,
+          "value": "anti_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "Every streak starts at 1. Keep your phone out of reach next time you drive to get a new streak going."
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "anti_streak_10",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 10,
+          "value": "anti_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "Your streak has been at zero for a while now. Stay off your phone next time you drive to get it going again."
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "anti_streak_15",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 15,
+          "value": "anti_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "There's no time like the present to start a new streak. Try putting your phone away and out of reach next time you drive."
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "streak_reset",
+    "company_id": "92a693a8-feba-474d-92da-ee727b720aa2",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": 5,
+          "value": "previous_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": 1,
+          "value": "anti_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": 0,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "Oops! You broke your distraction-free streak. Stay off your phone next time you drive to get it going again.",
+    "deeplink": "https://df2u0e.trmo.co/telematics/home/tripList/tripDetails?trip={trip_id}"
+  },
+  {
+    "origin": "v3.tmfb",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "safety_weekly_noncall_phone_usage_above_threshold",
+    "company_id": "d7a93db9-09e7-4a10-9beb-aacf757474e6",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than_equals",
+          "threshold": 10,
+          "value": "non_call_phone_usage_percent"
+        }
+      ]
+    },
+    "copy": [
+      "Weekly recap: 😟 You used your phone for {non_call_phone_usage_percent}% of your driving time this week which increases your risk of a crash. You can do better next week!",
+      "Weekly recap: You were more distracted than {non_call_phone_usage_percent_percentile_ranking}% of drivers in your area this week. Keep your eyes on the road and off your phone while driving this week. 👀 📵",
+      "Weekly recap: You use your phone {non_call_phone_usage_percent}% of driving time. That's more than {non_call_phone_usage_percent_percentile_ranking}% of people in your area. 📱 ↩️",
+      "Weekly recap: 😟 You were distracted with your phone while driving this week. You are 6 times more likely to crash while texting and driving! It's not worth the risk.",
+      "Weekly recap: 👀 📵 You were using your phone {non_call_phone_usage_percent}% while driving this week. Try to do better next week!"
+    ]
+  },
+  {
+    "origin": "v3.tmfb",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "safety_weekly_noncall_phone_usage_below_threshold",
+    "company_id": "d7a93db9-09e7-4a10-9beb-aacf757474e6",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": 10,
+          "value": "non_call_phone_usage_percent"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 0,
+          "value": "driver_trip_count"
+        }
+      ]
+    },
+    "copy": [
+      "Weekly recap: 😀 🏁 Nice job minimizing phone use while driving this week! That keeps you and those around you safe.",
+      "Weekly recap: Great job refraining from using your phone while driving this week! Keep it up. 🏁 📱",
+      "Weekly recap: 😀 Nicely done! Great job on keeping your phone use to a minimum while driving this week!",
+      "Weekly recap: Excellent job! You kept your eyes on the road and off your phone while driving this week. 🏁 📱",
+      "Weekly recap: You used your phone less than 10% this week. Your good driving habits keep the roads safer for all drivers! 😀 🏁"
+    ]
+  },
+  {
+    "trigger": "crash_assist.crash_predicted",
+    "origin": "*",
+    "category": "crash_assist.crash_predicted",
+    "name": "crash_assist_crash_predicted",
+    "company_id": "*",
+    "copy": "URGENT: Were you in an accident? Tap to reply. Otherwise, we'll call in 1 minute.",
+    "high_priority": true,
+    "sound": {
+      "critical": false,
+      "name": "default"
+    },
+    "notification_channel": "crash_predicted_channel_id",
+    "button_actions": [
+      {
+        "action": "CRASHASSIST_NO_THANKS",
+        "app": "CRASHASSIST_NO_THANKS"
+      },
+      {
+        "action": "CRASHASSIST_REQUEST_HELP",
+        "app": "CRASHASSIST_REQUEST_HELP"
+      }
+    ]
+  },
+  {
+    "trigger": "crash_assist.driver_ineligible",
+    "origin": "*",
+    "category": "IneligibleUser",
+    "name": "crash_assist_driver_ineligible",
+    "company_id": "*",
+    "copy": "Accident detection is no longer available. Tap for more info >"
+  },
+  {
+    "trigger": "crash_assist.driver_eligible",
+    "origin": "*",
+    "category": "EligibleUser",
+    "name": "crash_assist_driver_eligible",
+    "company_id": "*",
+    "silent": true
+  },
+  {
+    "trigger": "crashassist_workflow.agero_request_failed",
+    "origin": "*",
+    "category": "AgeroFailure",
+    "name": "progressive_integration_agero_failure",
+    "company_id": "*",
+    "copy": "Please call 911 ASAP! Something went wrong, and we’re unable to coordinate help for your accident.",
+    "high_priority": true,
+    "sound": {
+      "critical": false,
+      "name": "default"
+    }
+  },
+  {
+    "trigger": "progressive_integration.accident_updated",
+    "origin": "*",
+    "category": "IncidentListChanged",
+    "name": "progressive_integration_accident_updated",
+    "company_id": "*",
+    "silent": true
+  },
+  {
+    "origin": "v3",
+    "trigger": "driver_report.created",
+    "category": "new_report",
+    "name": "snapshot_roadtest_report",
+    "company_id": "92e67558-d068-445a-907f-2716a8483f18",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "send_push"
+        },
+        {
+          "operator": "equals",
+          "threshold": "Miscellaneous",
+          "value": "report_type"
+        }
+      ]
+    },
+    "copy": "",
+    "deeplink": "pgrsnapshotapp://main"
+  },
+  	  {
+    "origin": "v3",
+    "trigger": "driver_report.created",
+    "category": "new_report",
+    "name": "snapshot_roadtest_earned_discount",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+          "comparands": [
+            {
+                "operator": "equals",
+                "threshold": true,
+                "value": "send_push"
+            },
+            {
+                "operator": "equals",
+                "threshold": "RTDiscount",
+                "value": "report_type"
+            }
+          ]
+    },
+    "copy": "🎉 Great job behind the wheel! You earned a Snapshot Road Test discount—let’s see how you much saved! 💰",
+    "deeplink": "pgrsnapshotapp://main"
+  },
+  {
+    "origin": "v3",
+    "trigger": "driver_report.created",
+    "category": "new_report",
+    "name": "snapshot_roadtest_quote_reminder",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+          "comparands": [
+            {
+                "operator": "equals",
+                "threshold": true,
+                "value": "send_push"
+            },
+            {
+                "operator": "equals",
+                "threshold": "RTQuoteRemind",
+                "value": "report_type"
+            }
+          ]
+    },
+    "copy": "Claim your Snapshot Road Test discount ASAP! Your special rate expires on {report_data_display_date} 🕙",
+    "deeplink": "pgrsnapshotapp://main"
+  },
+  {
+    "trigger": "heartbeat.missing",
+    "origin": "*",
+    "category": "missing_heartbeats",
+    "name": "silent push",
+    "company_id": "*",
+    "silent": true,
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "ios",
+          "value": "device_type"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 5,
+          "value": "days_since_online_time"
+        }
+      ]
+    }
+  },
+
+  {
+    "origin": "v3",
+    "trigger": "trip.processed",
+    "category": "post_trip_summary",
+    "name": "post_trip_learning_first_trip",
+    "company_id": "cdf4c109-d7e1-4e4f-883c-0208a8b541a9",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 1,
+          "value": "overall_trip_count"
+        }
+      ]
+    },
+    "copy": "Tillykke! Du har lige kørt din første tur med Bilist+ Se din score i appen.",
+    "deeplink": "https://39kbae.trmo.co/telematics/home/tripList/tripDetails?tripId={trip_id}"
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "current_streak_10",
+    "company_id": "cdf4c109-d7e1-4e4f-883c-0208a8b541a9",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 10,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        }
+      ]
+    },
+    "copy": "Du har lige kørt 10 mobilfri ture i træk! Forsæt din gode kørsel",
+    "deeplink": "https://39kbae.trmo.co/telematics/home/streaks"
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "current_streak_25",
+    "company_id": "cdf4c109-d7e1-4e4f-883c-0208a8b541a9",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 25,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        }
+      ]
+    },
+    "copy": "Wow! Du har kørt 25 mobilfri ture i træk! Tak for din gode kørsel",
+    "deeplink": "https://39kbae.trmo.co/telematics/home/streaks"
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "current_streak_50",
+    "company_id": "cdf4c109-d7e1-4e4f-883c-0208a8b541a9",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 50,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        }
+      ]
+    },
+    "copy": "Wow! Du har kørt 50 mobilfri ture i træk! Hvor mange kan du mon opnå?",
+    "deeplink": "https://39kbae.trmo.co/telematics/home/streaks"
+  },
+  {
+    "origin": "v3",
+    "trigger": "streaks.updated",
+    "category": "streak_updated",
+    "name": "current_streak_100",
+    "company_id": "cdf4c109-d7e1-4e4f-883c-0208a8b541a9",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 100,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        }
+      ]
+    },
+    "copy": "Tillykke! Du har kørt 100 mobilfri ture!",
+    "deeplink": "https://39kbae.trmo.co/telematics/home/streaks"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.driver_days_since_registration",
+    "category": "new_report",
+    "name": "lbf_7_days_since_registration",
+    "company_id": "cdf4c109-d7e1-4e4f-883c-0208a8b541a9",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 7,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "Du har nu brugt Bilist+ i en uge! Åbn appen for at se, hvordan du har klaret det.",
+    "deeplink": "https://39kbae.trmo.co/telematics/home/scoreDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.driver_days_since_registration",
+    "category": "new_report",
+    "name": "lbf_30_days_since_registration",
+    "push_notification_config_id": "30_days_since_registration",
+    "company_id": "cdf4c109-d7e1-4e4f-883c-0208a8b541a9",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 30,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "Du har nu brugt Bilist+ i en uge! Åbn appen for at se, hvordan du har klaret det.",
+    "deeplink": "https://39kbae.trmo.co/telematics/home/scoreDetails"
+  },
+  {
+    "trigger": "trip.processed",
+    "origin": "v3",
+    "category": "post_trip_summary",
+    "name": "travelers_first_trip_summary",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 1,
+          "value": "overall_trip_count"
+        }
+      ]
+    },
+    "copy": "🚗Congrats! We recorded your very first trip. Here's to many more!",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/home/tripList/tripDetails?tripId=%tripId%"
+  },
+  {
+    "trigger": "streaks.updated",
+    "origin": "v3",
+    "category": "streak_updated",
+    "name": "travelers_streak_10",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 10,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "👏You just hit 🔟distraction-free trips in a row! Keep it 🆙",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/home/streakDetail"
+  },
+  {
+    "trigger": "streaks.updated",
+    "origin": "v3",
+    "category": "streak_updated",
+    "name": "travelers_streak_25",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 25,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "🎉Whoohoo! You've hit 2️⃣5️⃣consecutive distraction-free trips! Thanks for being safe out there!",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/home/streakDetail"
+  },
+  {
+    "trigger": "streaks.updated",
+    "origin": "v3",
+    "category": "streak_updated",
+    "name": "travelers_streak_50",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 50,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "👀Wow! Your distraction-free drives streak is at 5️⃣0️⃣! How high will it go?",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/home/streakDetail"
+  },
+  {
+    "trigger": "streaks.updated",
+    "origin": "v3",
+    "category": "streak_updated",
+    "name": "travelers_streak_100",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 100,
+          "value": "current_streak"
+        },
+        {
+          "operator": "equals",
+          "threshold": "TRIP",
+          "value": "trigger_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": "distraction_without_handsfree",
+          "value": "streak_type"
+        }
+      ]
+    },
+    "copy": "Holy 🐮! Your streak of distraction-free drives is at 💯!",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/home/streakDetail"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.driver_days_since_registration",
+    "category": "new_report",
+    "name": "travelers_7_days_since_registration",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 7,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "One week down! 🎉Take a look at how you're doing in the IntelliDrive app📱",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/scoreDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.driver_days_since_registration",
+    "category": "new_report",
+    "name": "travelers_30_days_since_registration",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 30,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "🗓It's been 30 days! You're 1/3 of the of the way through the IntelliDrive program. Check out your progress 👀",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/scoreDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.driver_days_since_registration",
+    "category": "new_report",
+    "name": "travelers_60_days_since_registration",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "limit": {
+      "type": "window",
+      "value": 1,
+      "size": 1
+    },
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 60,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "🗓Only 30 days left-you're 2/3 of the of the way through the IntelliDrive program. See how you're doing and focus on safe driving to maximize your savings.💰",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/scoreDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "monitoring_period.ended",
+    "category": "MonitoringPeriod",
+    "name": "travelers_monitoring_period_ended",
+    "company_id": "5ce0575c-0068-4121-a6a0-365494accd44",
+    "copy": "🎉You did it! Your IntelliDrive program is complete. Open the app to see your final results. 👀💰",
+    "deeplink": "https://zia94x.trmo.co/telematics/tabBar/scoreDetails"
+  },
+  {
+    "trigger": "monitoring_period.ended",
+    "origin": "*",
+    "category": "MonitoringPeriod",
+    "name": "monitoring_period_ended",
+    "company_id": "def027a1-4482-457a-88f7-89a80ffc291d",
+    "copy": "Congrats! You completed your program! Check your results!"
+  },
+  {
+    "trigger": "push.send_request",
+    "origin": "*",
+    "category": "custom",
+    "name": "custom_push_notifications",
+    "company_id": "cdf4c109-d7e1-4e4f-883c-0208a8b541a9",
+    "copy": "*"
+  },
+  {
+    "origin": "v3",
+    "trigger": "rewards_service.spin_reminder",
+    "category": "rewards_push_notifications",
+    "name": "spin_reminder_notify_drivers",
+    "company_id": "92e67558-d068-445a-907f-2716a8483f18",
+    "copy": "You may have won up to $100! Tap this notification and spin the wheel to reveal if you won this month"
+  },
+  {
+    "origin": "v3",
+    "trigger": "rewards_service.eligibility_check",
+    "category": "rewards_push_notifications",
+    "name": "spin_notify_eligible_drivers",
+    "company_id": "92e67558-d068-445a-907f-2716a8483f18",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "sweepstakes",
+          "value": "eligibility_check_type"
+        },
+        {
+          "operator": "equals",
+          "threshold": true,
+          "value": "is_eligible"
+        }
+      ]
+    },
+    "copy": "Time to take a spin to reveal if you won! Nice work! Tap this notification and spin the wheel to reveal if you won this month"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "first_week_streak_greater_than_one",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": 1,
+          "value": "all_time_streak"
+        },
+        {
+          "operator": "less_than_equals",
+          "threshold": 7,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "One week down. You're on a streak of {all_time_streak} Distraction-free Drives. How high can you get it?",
+    "deeplink": "https://08pmuz.trmo.co/telematics/home/streakDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "first_week_no_streak",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 0,
+          "value": "all_time_streak"
+        },
+        {
+          "operator": "less_than_equals",
+          "threshold": 7,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "One week down. You haven't been on a Distraction-free Drive yet, but we know you can! Drive safe and make sure your next drive is distraction-free.",
+    "deeplink": "https://08pmuz.trmo.co/telematics/home/streakDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "first_week_streak_equals_one",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 1,
+          "value": "all_time_streak"
+        },
+        {
+          "operator": "less_than_equals",
+          "threshold": 7,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "One week down. You've just started a streak of 1 Distraction-free Drive. Put your phone away when driving and see how high you can go!",
+    "deeplink": "https://08pmuz.trmo.co/telematics/home/streakDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "beyond_first_week_streak_greater_than_company_avg",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "greater_than",
+          "threshold": "company_avg_streak",
+          "threshold_type": "metadata",
+          "value": "all_time_streak"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 7,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "Another week down! Your streak of {all_time_streak} Distraction-free Drives is {all_time_streak_deviation_from_company_avg} better than the average driver's. Nice work!",
+    "deeplink": "https://08pmuz.trmo.co/telematics/home/streakDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "beyond_first_week_streak_less_than_company_avg",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "less_than",
+          "threshold": "company_avg_streak",
+          "threshold_type": "metadata",
+          "value": "all_time_streak"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 7,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "Another week down! Your streak of {all_time_streak} Distraction-free Drives is {all_time_streak_deviation_from_company_avg} lower than the average driver's. See if you can get it higher!",
+    "deeplink": "https://08pmuz.trmo.co/telematics/home/streakDetails"
+  },
+  {
+    "origin": "v3",
+    "trigger": "scheduled.weekly_mon_6pm",
+    "category": "weekly_summary",
+    "name": "beyond_first_week_streak_greater_than_company_avg",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": "company_avg_streak",
+          "threshold_type": "metadata",
+          "value": "all_time_streak"
+        },
+        {
+          "operator": "greater_than",
+          "threshold": 7,
+          "value": "days_since_registration"
+        }
+      ]
+    },
+    "copy": "Another week down! Your streak of {all_time_streak} Distraction-free Drives is tied with the average driver's. See if you can beat that record – good luck!",
+    "deeplink": "https://08pmuz.trmo.co/telematics/home/streakDetails"
+  },
+  {
+    "trigger": "trip.processed",
+    "origin": "v3",
+    "category": "first_trip_summary",
+    "name": "amfam_first_trip_summary",
+    "company_id": "0a062d61-1c93-4717-8800-a48ff2378b28",
+    "criteria": {
+      "comparands": [
+        {
+          "operator": "equals",
+          "threshold": 1,
+          "value": "overall_trip_count"
+        }
+      ]
+    },
+    "copy": "Congrats! We recorded your very first trip. Here's to many more!",
+    "deeplink": "https://08pmuz.trmo.co/telematics/home/tripList/tripDetails?tripId={trip_id}"
+  }
+]

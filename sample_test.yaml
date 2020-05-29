@@ -1,0 +1,1 @@
+ yq x -P first.yaml second.yaml ubi3_customers.name=='UBI3 Test'
